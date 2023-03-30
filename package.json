@@ -1,0 +1,23 @@
+{
+  "name": "ufpn",
+  "version": "1.0.0",
+  "description": "更新文件夹前缀数字。Update folder prefix number.",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/houpengxu/ufpn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/houpengxu/ufpn/issues"
+  },
+  "homepage": "https://github.com/houpengxu/ufpn#readme",
+  "bin": {
+    "ufpn": "src/index.js"
+  },
+  "files": [
+    "!test"
+  ]
+}
