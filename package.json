@@ -18,6 +18,7 @@
     "ufpn": "src/index.js"
   },
   "files": [
-    "!test"
+    "!test",
+    "!node_modules"
   ]
 }
