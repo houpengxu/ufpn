@@ -1,21 +1,39 @@
 #!/usr/bin/env node
 const fs = require('fs');
 
-// 获取当前目录下所有文件夹
-const folders = fs.readdirSync('./', { withFileTypes: true })
-  .filter(dirent => dirent.isDirectory())
-  .map(dirent => dirent.name);
-
-
-// 给数字开头的文件夹更新前缀
-folders.forEach((folder, index) => {
-  if (/^\d/.test(folder)) {
-    const oldPath = `./${folder}`;
-    const newPath = `./${addZero(index + 1, folders.length.toString().length)}${folder.replace(folder.match(/^\d+/)[0], '')}`;
-    console.log(oldPath, newPath)
-    fs.renameSync(oldPath, newPath);
+// 读取当前目录下的所有文件和文件夹
+fs.readdir('.', (err, res) => {
+  if (err) {
+    console.error(err);
+    return;
   }
+  let folders = []
+  let files = []
+  res.forEach((item) => {
+    // 判断是否为文件夹
+    if (fs.lstatSync(item).isDirectory()) {
+      folders.push(item)
+    } else {
+      files.push(item)
+    }
+  });
+  rename(folders)
+  rename(files)
+  console.log('更新完成!');
 });
+
+// 重命名文件夹或文件
+function rename(pathList) {
+  pathList.forEach((item, index) => {
+    // 数字开头且不全是数字
+    if (/^\d+\D+/.test(item)) {
+      const oldPath = `./${item}`;
+      const newPath = `./${addZero(index + 1, pathList.length.toString().length)}${item.replace(item.match(/^\d+/)[0], '')}`;
+      console.log(oldPath, newPath)
+      fs.renameSync(oldPath, newPath);
+    }
+  })
+}
 
 // 补全0
 function addZero(num, length) {
@@ -25,7 +43,6 @@ function addZero(num, length) {
   }
   return str;
 }
-console.log('更新完成!');
 
 // 如果执行命令的时候有参数,则用作git提交注释自动进行git提交和推送
 const gitComment = process.argv[2]
