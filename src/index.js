@@ -24,9 +24,11 @@ fs.readdir('.', (err, res) => {
 
 // 重命名文件夹或文件
 function rename(pathList) {
-  pathList.forEach((item, index) => {
+  let index = 0;
+  pathList.forEach((item) => {
     // 数字开头且不全是数字
     if (/^\d+\D+/.test(item)) {
+      index++;
       const oldPath = `./${item}`;
       const newPath = `./${addZero(index + 1, pathList.length.toString().length)}${item.replace(item.match(/^\d+/)[0], '')}`;
       console.log(oldPath, newPath)
