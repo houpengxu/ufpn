@@ -30,7 +30,7 @@ function rename(pathList) {
     if (/^\d+\D+/.test(item)) {
       index++;
       const oldPath = `./${item}`;
-      const newPath = `./${addZero(index + 1, pathList.length.toString().length)}${item.replace(item.match(/^\d+/)[0], '')}`;
+      const newPath = `./${addZero(index, pathList.length.toString().length)}${item.replace(item.match(/^\d+/)[0], '')}`;
       console.log(oldPath, newPath)
       fs.renameSync(oldPath, newPath);
     }
