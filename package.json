@@ -1,7 +1,7 @@
 {
   "name": "ufpn",
-  "version": "1.0.3",
-  "description": "更新文件或文件夹前缀数字。Update folder prefix number.",
+  "version": "1.1.0",
+  "description": "Update files or folders prefix number.更新文件或文件夹前缀数字。",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "files": [
     "!test",
     "!node_modules"
-  ]
+  ],
+  "dependencies": {
+    "commander": "^10.0.0"
+  }
 }

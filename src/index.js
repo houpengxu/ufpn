@@ -1,7 +1,22 @@
 #!/usr/bin/env node
 const fs = require('fs');
+const packageInfo = require('../package.json');
+const { program } = require('commander');
 
-// 读取当前目录下的所有文件和文件夹
+const defalutAddSeparator = '.'
+program
+  .name(packageInfo.name)
+  .description(packageInfo.description)
+  .version(packageInfo.version);
+
+program
+  .option('-as, --add-separator <char>', 'add separator character', defalutAddSeparator)
+  .option('-rs, --remove-separator <char>', 'remove separator character')
+program.parse();
+
+const options = program.opts();
+
+// Read all files and folder in the current directory. 读取当前目录下的所有文件和文件夹。
 fs.readdir('.', (err, res) => {
   if (err) {
     console.error(err);
@@ -10,7 +25,6 @@ fs.readdir('.', (err, res) => {
   let folders = []
   let files = []
   res.forEach((item) => {
-    // 判断是否为文件夹
     if (fs.lstatSync(item).isDirectory()) {
       folders.push(item)
     } else {
@@ -19,43 +33,33 @@ fs.readdir('.', (err, res) => {
   });
   rename(folders)
   rename(files)
-  console.log('更新完成!');
+  console.log('Upadte completed ! 更新完成！');
 });
 
-// 重命名文件夹或文件
 function rename(pathList) {
   let index = 0;
   pathList.forEach((item) => {
-    // 数字开头且不全是数字
+    // Starting with a number but not all digits. 数字开头且不全是数字
     if (/^\d+\D+/.test(item)) {
       index++;
       const oldPath = `./${item}`;
-      const newPath = `./${addZero(index, pathList.length.toString().length)}${item.replace(item.match(/^\d+/)[0], '')}`;
+      const newPathPart1 = addZero(index, pathList.length.toString().length)
+      let newPathPart2 = options.addSeparator || ''
+      if (options.removeSeparator == defalutAddSeparator) {
+        newPathPart2 = ''
+      }
+      const newPathPart3 = item.replace(item.match(/^\d+/)[0] + (options.removeSeparator || ''), '')
+      const newPath = `./${newPathPart1 + newPathPart2 + newPathPart3}`;
       console.log(oldPath, newPath)
       fs.renameSync(oldPath, newPath);
     }
   })
 }
 
-// 补全0
 function addZero(num, length) {
   var str = num.toString();
   while (str.length < length) {
     str = '0' + str;
   }
   return str;
-}
-
-// 如果执行命令的时候有参数,则用作git提交注释自动进行git提交和推送
-const gitComment = process.argv[2]
-if (gitComment) {
-  const { exec } = require('child_process');
-  exec(`git add .;git commit -m "${gitComment}";git push;`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`执行命令出错: ${error}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-    console.error(`stderr: ${stderr}`);
-  });
 }
