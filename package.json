@@ -1,6 +1,6 @@
 {
   "name": "ufpn",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Update files or folders prefix number.更新文件或文件夹前缀数字。",
   "main": "src/index.js",
   "repository": {
