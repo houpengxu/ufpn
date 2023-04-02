@@ -3,14 +3,13 @@ const fs = require('fs');
 const packageInfo = require('../package.json');
 const { program } = require('commander');
 
-const defalutAddSeparator = '.'
 program
   .name(packageInfo.name)
   .description(packageInfo.description)
   .version(packageInfo.version);
 
 program
-  .option('-as, --add-separator <char>', 'add separator character', defalutAddSeparator)
+  .option('-as, --add-separator <char>', 'add separator character')
   .option('-rs, --remove-separator <char>', 'remove separator character')
 program.parse();
 
@@ -45,9 +44,6 @@ function rename(pathList) {
       const oldPath = `./${item}`;
       const newPathPart1 = addZero(index, pathList.length.toString().length)
       let newPathPart2 = options.addSeparator || ''
-      if (options.removeSeparator == defalutAddSeparator) {
-        newPathPart2 = ''
-      }
       const newPathPart3 = item.replace(item.match(/^\d+/)[0] + (options.removeSeparator || ''), '')
       const newPath = `./${newPathPart1 + newPathPart2 + newPathPart3}`;
       console.log(oldPath, newPath)
